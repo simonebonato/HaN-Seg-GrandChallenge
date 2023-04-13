@@ -63,3 +63,40 @@ def merge_segmentations(
         merged_segmentation += data * (idx + 1)
 
     return merged_segmentation.astype(np.uint8), names_dict
+
+
+def load_sample(
+    case_number: int,
+    imagesTr_folder: str = "data/imagesTr/",
+    labelsTr_folder: str = "data/labelsTr/",
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Loads CT, MRI and segmentation for a sample given the case number.
+
+    Parameters
+    :param case_number: The case number of the sample
+    :param imagesTr_folder: The path to the imagesTr folder
+    :param labelsTr_folder: The path to the labelsTr folder
+
+    Returns
+    :return: The CT, MRI and segmentation of the sample
+    """
+    case_number = str(case_number)
+
+    CT_path = os.path.join(imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_CT.nrrd")
+    MR_path = os.path.join(
+        imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_MR_T1.nrrd"
+    )
+    label_path = os.path.join(
+        labelsTr_folder, f"case_{case_number.zfill(2)}_segmentation.nrrd"
+    )
+
+    assert os.path.exists(CT_path), f"CT image not found at {CT_path}"
+    assert os.path.exists(MR_path), f"MR image not found at {MR_path}"
+    assert os.path.exists(label_path), f"Label not found at {label_path}"
+
+    CT, _ = nrrd.read(CT_path)
+    MR, _ = nrrd.read(MR_path)
+    label, _ = nrrd.read(label_path)
+
+    return CT, MR, label
