@@ -81,14 +81,9 @@ def load_sample(
     Returns
     :return: The CT, MRI and segmentation of the sample
     """
-    case_number = str(case_number)
 
-    CT_path = os.path.join(imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_CT.nrrd")
-    MR_path = os.path.join(
-        imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_MR_T1.nrrd"
-    )
-    label_path = os.path.join(
-        labelsTr_folder, f"case_{case_number.zfill(2)}_segmentation.nrrd"
+    CT_path, MR_path, label_path = get_sample_paths(
+        case_number, imagesTr_folder, labelsTr_folder
     )
 
     assert os.path.exists(CT_path), f"CT image not found at {CT_path}"
@@ -100,3 +95,31 @@ def load_sample(
     label, _ = nrrd.read(label_path)
 
     return CT, MR, label
+
+
+def get_sample_paths(
+    case_number: int,
+    imagesTr_folder: str = "data/imagesTr/",
+    labelsTr_folder: str = "data/labelsTr/",
+) -> Tuple[str, str, str]:
+    """
+    Gets the file paths of the CT, MR and segmentation for a sample given the case number.
+
+    Parameters
+    :param case_number: The case number of the sample
+    :param imagesTr_folder: The path to the imagesTr folder
+
+    Returns
+    :return: The CT, MR and segmentation file paths of the sample
+    """
+    case_number = str(case_number)
+
+    CT_path = os.path.join(imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_CT.nrrd")
+    MR_path = os.path.join(
+        imagesTr_folder, f"case_{case_number.zfill(2)}_IMG_MR_T1.nrrd"
+    )
+    label_path = os.path.join(
+        labelsTr_folder, f"case_{case_number.zfill(2)}_segmentation.nrrd"
+    )
+
+    return CT_path, MR_path, label_path
