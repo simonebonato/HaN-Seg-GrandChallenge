@@ -3,7 +3,7 @@ import numpy as np
 from utils.file_reading import load_sample
 
 
-def plot_sample(
+def plot_sample_from_dir(
     plane: str,
     case_number: int,
     slice_number: int,
